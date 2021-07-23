@@ -1,8 +1,11 @@
 var viewCartButton = document.getElementsByClassName('view-cart')[0];
+var clearCartButton = document.getElementsByClassName('clear-cart')[0];
+
 var shoppingCart = document.getElementsByClassName('shopping-cart')[0];
 var products = document.getElementsByClassName('products')[0];
 
 var cart = [];
+var total = 0;
 
 viewCartButton.addEventListener('click', function () {
   if (shoppingCart.classList.contains('show')) {
@@ -10,6 +13,16 @@ viewCartButton.addEventListener('click', function () {
   } else {
     shoppingCart.className += ' show';
   }
+});
+
+
+clearCartButton.addEventListener('click', function() {
+  cart = [];
+  total = 0;
+
+  renderCart();
+  renderTotal();
+
 });
 
 products.addEventListener('click', function (e) {
@@ -20,18 +33,26 @@ products.addEventListener('click', function (e) {
     var itemPrice = e.target.closest('.item')
       .getAttribute('data-price');
 
-    console.log(itemName);
-    console.log(itemPrice);
-
     var product = {
       name: itemName,
       price: itemPrice
     };
 
     cart.push(product);
+    total += Number(product.price);
+    console.log(total);
     renderCart();
+    renderTotal();
   }
 });
+
+var renderTotal = function() {
+  var totalElement = document.getElementsByClassName('total')[0];
+
+  totalElement.innerHTML = total;
+};
+
+
 
 var renderCart = function () {
   // TODO: empty `.cart-list`
@@ -39,33 +60,19 @@ var renderCart = function () {
 
   while(cartList.hasChildNodes()) {
     cartList.removeChild(cartList.firstChild);
-  }
-
+  };
 
   // TODO: loop through _cart_ and create new HTML based on our objects
-  var items = '';
+var items = '';
 
   for (var i = 0; i < cart.length; i++) {
     items += '<div>' + cart[i].name
       + ' - $' + cart[i].price + '</div>';
-  }
+  };
 
   // TODO: append the new HTML to the page
-  
   cartList.innerHTML = items;
 
-  // Finish up the "total" feature
-  var total = document.getElementsByClassName('total')[0];
-  console.log(total);
+}
 
-  var totalCost = 0;
-
-  for (var i = 0; i < cart.length; i++) {
-   totalCost += Number(cart[i].price);
-   total.innerHTML = totalCost;
-  }
-
-  // Make the Clear Cart button work
-
-};
 
